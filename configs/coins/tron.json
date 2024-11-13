@@ -1,0 +1,45 @@
+{
+    "coin": {
+        "name": "Tron",
+        "shortcut": "TRX",
+        "label": "Tron",
+        "alias": "tron"
+    },
+    "ports": {
+        "backend_rpc": 8097,
+        "blockbook_internal": 9097,
+        "blockbook_public": 9197
+    },
+    "ipc": {
+        "rpc_url_template": "http://127.0.0.1:{{.Ports.BackendRPC}}/jsonrpc",
+        "rpc_timeout": 60
+    },
+    "blockbook": {
+        "package_name": "blockbook-tron",
+        "system_user": "blockbook-tron",
+        "internal_binding_template": ":{{.Ports.BlockbookInternal}}",
+        "public_binding_template": ":{{.Ports.BlockbookPublic}}",
+        "explorer_url": "",
+        "additional_params": "-workers=16",
+        "block_chain": {
+            "parse": true,
+            "mempool_workers": 0,
+            "mempool_sub_workers": 0,
+            "block_addresses_to_keep": 300,
+            "additional_params": {
+                "address_aliases": true,
+                "mempoolTxTimeoutHours": 0,
+                "processInternalTransactions": true,
+                "queryBackendOnMempoolResync": false,
+                "fiat_rates": "coingecko",
+                "fiat_rates_vs_currencies": "TRX,AED,ARS,AUD,BDT,BHD,BMD,BRL,CAD,CHF,CLP,CNY,CZK,DKK,EUR,GBP,HKD,HUF,IDR,ILS,INR,JPY,KRW,KWD,LKR,MMK,MXN,MYR,NGN,NOK,NZD,PHP,PKR,PLN,RUB,SAR,SEK,SGD,THB,TRY,TWD,UAH,USD,VEF,VND,ZAR,BTC,ETH",
+                "fiat_rates_params": "{\"coin\": \"ethereum\",\"platformIdentifier\": \"ethereum\",\"platformVsCurrency\": \"eth\",\"periodSeconds\": 900}",
+                "fourByteSignatures": "https://www.4byte.directory/api/v1/signatures/"
+            }
+        }
+    },
+    "meta": {
+        "package_maintainer": "IT",
+        "package_maintainer_email": "it@satoshilabs.com"
+    }
+}
