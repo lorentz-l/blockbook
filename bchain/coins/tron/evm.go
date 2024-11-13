@@ -13,7 +13,7 @@ import (
 
 // HeaderByNumber returns a block header that implements the EVMHeader interface
 func (c *EthereumClient) HeaderByNumber(ctx context.Context, number *big.Int) (bchain.EVMHeader, error) {
-	h, err := c.Client.HeaderByNumber(ctx, number)
+	h, err := c.HeaderByNumber2(ctx, number)
 	if err != nil {
 		return nil, err
 	}
