@@ -7,7 +7,6 @@ import (
 	"io"
 	"math/big"
 	"net/http"
-	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -132,22 +131,22 @@ func (b *TronRPC) Initialize() error {
 	b.NewBlock = &EthereumNewBlock{channel: make(chan *types.Header)}
 	b.NewTx = &EthereumNewTx{channel: make(chan ethcommon.Hash)}
 
-	ctx, cancel := context.WithTimeout(context.Background(), b.Timeout)
+	_, cancel := context.WithTimeout(context.Background(), b.Timeout)
 	defer cancel()
 
-	id, err := b.Client.NetworkID(ctx)
-	if err != nil {
-		return err
-	}
-
-	// parameters for getInfo request
-	switch Network(id.Uint64()) {
-	case MainNet:
-		b.Testnet = false
-		b.Network = "livenet"
-	default:
-		return errors.Errorf("Unknown network id %v", id)
-	}
+	//id, err := b.Client.NetworkID(ctx)
+	//if err != nil {
+	//	return err
+	//}
+	//
+	//// parameters for getInfo request
+	//switch Network(id.Uint64()) {
+	//case MainNet:
+	//	b.Testnet = false
+	//	b.Network = "livenet"
+	//default:
+	//	return errors.Errorf("Unknown network id %v", id)
+	//}
 
 	b.Testnet = false
 	b.Network = "livenet"
@@ -397,10 +396,6 @@ func (b *TronRPC) GetChainInfo() (*bchain.ChainInfo, error) {
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), b.Timeout)
 	defer cancel()
-	id, err := b.Client.NetworkID(ctx)
-	if err != nil {
-		return nil, err
-	}
 	var ver string
 	if err := b.RPC.CallContext(ctx, &ver, "web3_clientVersion"); err != nil {
 		return nil, err
@@ -413,12 +408,7 @@ func (b *TronRPC) GetChainInfo() (*bchain.ChainInfo, error) {
 		Version:          ver,
 		ConsensusVersion: consensusVersion,
 	}
-	idi := int(id.Uint64())
-	if idi == int(b.MainNetChainID) {
-		rv.Chain = "mainnet"
-	} else {
-		rv.Chain = "testnet " + strconv.Itoa(idi)
-	}
+	rv.Chain = "mainnet"
 	return rv, nil
 }
 
