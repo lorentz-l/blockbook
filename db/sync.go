@@ -116,7 +116,8 @@ func (w *SyncWorker) ResyncIndex(onNewBlock bchain.OnNewBlockFunc, initialSync b
 }
 
 func (w *SyncWorker) resyncIndex(onNewBlock bchain.OnNewBlockFunc, initialSync bool) error {
-	remoteBestHash, err := w.chain.GetBestBlockHash()
+	//remoteBestHash, err := w.chain.GetBestBlockHash()
+	remoteBestHeight, err := w.chain.GetBestBlockHeight()
 	if err != nil {
 		return err
 	}
@@ -125,21 +126,22 @@ func (w *SyncWorker) resyncIndex(onNewBlock bchain.OnNewBlockFunc, initialSync b
 		return err
 	}
 	// If the locally indexed block is the same as the best block on the network, we're done.
-	if localBestHash == remoteBestHash {
+	//if localBestHash == remoteBestHash {
+	if localBestHeight == remoteBestHeight {
 		glog.Infof("resync: synced at %d %s", localBestHeight, localBestHash)
 		return errSynced
 	}
 	if localBestHash != "" {
-		remoteHash, err := w.chain.GetBlockHash(localBestHeight)
+		_, err := w.chain.GetBlockHash(localBestHeight)
 		// for some coins (eth) remote can be at lower best height after rollback
 		if err != nil && err != bchain.ErrBlockNotFound {
 			return err
 		}
-		if remoteHash != localBestHash {
-			// forked - the remote hash differs from the local hash at the same height
-			glog.Info("resync: local is forked at height ", localBestHeight, ", local hash ", localBestHash, ", remote hash ", remoteHash)
-			return w.handleFork(localBestHeight, localBestHash, onNewBlock, initialSync)
-		}
+		//if remoteHash != localBestHash {
+		//	// forked - the remote hash differs from the local hash at the same height
+		//	glog.Info("resync: local is forked at height ", localBestHeight, ", local hash ", localBestHash, ", remote hash ", remoteHash)
+		//	return w.handleFork(localBestHeight, localBestHash, onNewBlock, initialSync)
+		//}
 		glog.Info("resync: local at ", localBestHeight, " is behind")
 		w.startHeight = localBestHeight + 1
 	} else {
