@@ -654,7 +654,7 @@ func (b *TronRPC) getInternalDataForBlock(blockHash string, blockHeight uint32, 
 		var trace []rpcTraceResult
 		err := b.RPC.CallContext(ctx, &trace, "debug_traceBlockByHash", blockHash, map[string]interface{}{"tracer": "callTracer"})
 		if err != nil {
-			glog.Error("debug_traceBlockByHash block ", blockHash, ", error ", err)
+			//glog.Error("debug_traceBlockByHash block ", blockHash, ", error ", err)
 			return data, contracts, err
 		}
 		if len(trace) != len(data) {
