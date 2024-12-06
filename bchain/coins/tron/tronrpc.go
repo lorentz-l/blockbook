@@ -537,7 +537,7 @@ func (b *TronRPC) getBlockRaw(hash string, height uint32, fullTxs bool) (json.Ra
 	var raw json.RawMessage
 	var err error
 	if hash != "" {
-		if hash == "pending" {
+		if hash == "pending" || hash == "latest" {
 			err = b.RPC.CallContext(ctx, &raw, "eth_getBlockByNumber", hash, fullTxs)
 		} else {
 			err = b.RPC.CallContext(ctx, &raw, "eth_getBlockByHash", ethcommon.HexToHash(hash), fullTxs)
@@ -899,7 +899,7 @@ func (b *TronRPC) GetTransactionSpecific(tx *bchain.Tx) (json.RawMessage, error)
 
 // GetMempoolTransactions returns transactions in mempool
 func (b *TronRPC) GetMempoolTransactions() ([]string, error) {
-	raw, err := b.getBlockRaw("pending", 0, false)
+	raw, err := b.getBlockRaw("latest", 0, false)
 	if err != nil {
 		return nil, err
 	}
