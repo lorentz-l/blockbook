@@ -312,10 +312,11 @@ func mainWithExitCode() int {
 			addrDescForOutpoint = index.AddrDescForOutpoint
 		}
 		err = chain.InitializeMempool(addrDescForOutpoint, onNewTxAddr, onNewTx)
-		if err != nil {
-			glog.Error("initializeMempool ", err)
-			return exitCodeFatal
-		}
+		glog.Error("initializeMempool ", err)
+		//if err != nil {
+		//	glog.Error("initializeMempool ", err)
+		//	return exitCodeFatal
+		//}
 		var mempoolCount int
 		if mempoolCount, err = mempool.Resync(); err != nil {
 			glog.Error("resyncMempool ", err)
