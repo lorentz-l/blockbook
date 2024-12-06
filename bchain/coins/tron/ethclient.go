@@ -4,15 +4,15 @@ import (
 	"context"
 	"encoding/json"
 	ethclient2 "github.com/ava-labs/coreth/ethclient"
-	"github.com/ethereum/go-ethereum/common/hexutil"
-	"github.com/golang/glog"
-	"github.com/juju/errors"
 	"math/big"
 
 	"github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/ethclient"
+	"github.com/golang/glog"
+	"github.com/juju/errors"
 )
 
 // EthereumClient wraps a client to implement the EVMClient interface
@@ -183,26 +183,22 @@ func (ec *EthereumClient) getBlock(ctx context.Context, method string, args ...i
 	}
 
 	return types.NewBlockWithHeader(&types.Header{
-		ParentHash:       head.ParentHash,
-		UncleHash:        head.UncleHash,
-		Coinbase:         head.Coinbase,
-		Root:             common.Hash{},
-		TxHash:           head.TxHash,
-		ReceiptHash:      head.ReceiptHash,
-		Bloom:            head.Bloom,
-		Difficulty:       big.NewInt(int64(head.Difficulty)),
-		Number:           big.NewInt(int64(head.Number)),
-		GasLimit:         uint64(head.GasLimit),
-		GasUsed:          uint64(head.GasUsed),
-		Time:             uint64(head.Time),
-		Extra:            nil,
-		MixDigest:        head.MixDigest,
-		Nonce:            head.Nonce,
-		BaseFee:          big.NewInt(int64(head.BaseFee)),
-		WithdrawalsHash:  nil,
-		BlobGasUsed:      nil,
-		ExcessBlobGas:    nil,
-		ParentBeaconRoot: nil,
+		ParentHash:  head.ParentHash,
+		UncleHash:   head.UncleHash,
+		Coinbase:    head.Coinbase,
+		Root:        common.Hash{},
+		TxHash:      head.TxHash,
+		ReceiptHash: head.ReceiptHash,
+		Bloom:       head.Bloom,
+		Difficulty:  big.NewInt(int64(head.Difficulty)),
+		Number:      big.NewInt(int64(head.Number)),
+		GasLimit:    uint64(head.GasLimit),
+		GasUsed:     uint64(head.GasUsed),
+		Time:        uint64(head.Time),
+		Extra:       nil,
+		MixDigest:   head.MixDigest,
+		Nonce:       head.Nonce,
+		BaseFee:     big.NewInt(int64(head.BaseFee)),
 	}).WithBody(txs, uncles), nil
 }
 
@@ -214,58 +210,50 @@ func (ec *EthereumClient) HeaderByHash(ctx context.Context, hash common.Hash) (*
 		err = ethereum.NotFound
 	}
 	return &types.Header{
-		ParentHash:       head.ParentHash,
-		UncleHash:        head.UncleHash,
-		Coinbase:         head.Coinbase,
-		Root:             common.Hash{},
-		TxHash:           head.TxHash,
-		ReceiptHash:      head.ReceiptHash,
-		Bloom:            head.Bloom,
-		Difficulty:       big.NewInt(int64(head.Difficulty)),
-		Number:           big.NewInt(int64(head.Number)),
-		GasLimit:         uint64(head.GasLimit),
-		GasUsed:          uint64(head.GasUsed),
-		Time:             uint64(head.Time),
-		Extra:            nil,
-		MixDigest:        head.MixDigest,
-		Nonce:            head.Nonce,
-		BaseFee:          big.NewInt(int64(head.BaseFee)),
-		WithdrawalsHash:  nil,
-		BlobGasUsed:      nil,
-		ExcessBlobGas:    nil,
-		ParentBeaconRoot: nil,
+		ParentHash:  head.ParentHash,
+		UncleHash:   head.UncleHash,
+		Coinbase:    head.Coinbase,
+		Root:        common.Hash{},
+		TxHash:      head.TxHash,
+		ReceiptHash: head.ReceiptHash,
+		Bloom:       head.Bloom,
+		Difficulty:  big.NewInt(int64(head.Difficulty)),
+		Number:      big.NewInt(int64(head.Number)),
+		GasLimit:    uint64(head.GasLimit),
+		GasUsed:     uint64(head.GasUsed),
+		Time:        uint64(head.Time),
+		Extra:       nil,
+		MixDigest:   head.MixDigest,
+		Nonce:       head.Nonce,
+		BaseFee:     big.NewInt(int64(head.BaseFee)),
 	}, err
 }
 
-// HeaderByNumber2 returns a block header from the current canonical chain. If number is
+// TronHeaderByNumber returns a block header from the current canonical chain. If number is
 // nil, the latest known header is returned.
-func (ec *EthereumClient) HeaderByNumber2(ctx context.Context, number *big.Int) (*types.Header, error) {
+func (ec *EthereumClient) TronHeaderByNumber(ctx context.Context, number *big.Int) (*types.Header, error) {
 	var head *Header
 	err := ec.Client.Client().CallContext(ctx, &head, "eth_getBlockByNumber", ethclient2.ToBlockNumArg(number), false)
 	if err == nil && head == nil {
 		err = ethereum.NotFound
 	}
 	return &types.Header{
-		ParentHash:       head.ParentHash,
-		UncleHash:        head.UncleHash,
-		Coinbase:         head.Coinbase,
-		Root:             common.Hash{},
-		TxHash:           head.TxHash,
-		ReceiptHash:      head.ReceiptHash,
-		Bloom:            head.Bloom,
-		Difficulty:       big.NewInt(int64(head.Difficulty)),
-		Number:           big.NewInt(int64(head.Number)),
-		GasLimit:         uint64(head.GasLimit),
-		GasUsed:          uint64(head.GasUsed),
-		Time:             uint64(head.Time),
-		Extra:            nil,
-		MixDigest:        head.MixDigest,
-		Nonce:            head.Nonce,
-		BaseFee:          big.NewInt(int64(head.BaseFee)),
-		WithdrawalsHash:  nil,
-		BlobGasUsed:      nil,
-		ExcessBlobGas:    nil,
-		ParentBeaconRoot: nil,
+		ParentHash:  head.ParentHash,
+		UncleHash:   head.UncleHash,
+		Coinbase:    head.Coinbase,
+		Root:        common.Hash{},
+		TxHash:      head.TxHash,
+		ReceiptHash: head.ReceiptHash,
+		Bloom:       head.Bloom,
+		Difficulty:  big.NewInt(int64(head.Difficulty)),
+		Number:      big.NewInt(int64(head.Number)),
+		GasLimit:    uint64(head.GasLimit),
+		GasUsed:     uint64(head.GasUsed),
+		Time:        uint64(head.Time),
+		Extra:       nil,
+		MixDigest:   head.MixDigest,
+		Nonce:       head.Nonce,
+		BaseFee:     big.NewInt(int64(head.BaseFee)),
 	}, err
 }
 

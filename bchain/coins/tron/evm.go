@@ -8,15 +8,18 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/rpc"
+	"github.com/golang/glog"
 	"github.com/trezor/blockbook/bchain"
 )
 
 // HeaderByNumber returns a block header that implements the EVMHeader interface
 func (c *EthereumClient) HeaderByNumber(ctx context.Context, number *big.Int) (bchain.EVMHeader, error) {
-	h, err := c.HeaderByNumber2(ctx, number)
+	h, err := c.TronHeaderByNumber(ctx, number)
 	if err != nil {
 		return nil, err
 	}
+
+	glog.Error("TronHeaderByNumber number:", number)
 
 	return &EthereumHeader{Header: h}, nil
 }
