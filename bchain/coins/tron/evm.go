@@ -19,7 +19,7 @@ func (c *EthereumClient) HeaderByNumber(ctx context.Context, number *big.Int) (b
 		return nil, err
 	}
 
-	glog.Error("TronHeaderByNumber number:", number)
+	glog.Error("TronHeaderByNumber req.number: ", number, " res.number: ", h.Number)
 
 	return &EthereumHeader{Header: h}, nil
 }

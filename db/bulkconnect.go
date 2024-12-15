@@ -438,7 +438,9 @@ func (b *BulkConnect) Close() error {
 			return err
 		}
 	}
+	glog.Error("rocksdb: bulk connect closing 1")
 	bt, err := b.d.loadBlockTimes()
+	glog.Error("rocksdb: bulk connect closing 2")
 	if err != nil {
 		return err
 	}

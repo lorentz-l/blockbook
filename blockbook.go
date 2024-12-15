@@ -56,7 +56,7 @@ var (
 	fixUtxo     = flag.Bool("fixutxo", false, "check and fix utxo db and exit")
 	prof        = flag.String("prof", "", "http server binding [address]:port of the interface to profiling data /debug/pprof/ (default no profiling)")
 
-	syncChunk   = flag.Int("chunk", 100, "block chunk size for processing in bulk mode")
+	syncChunk   = flag.Int("chunk", 0, "block chunk size for processing in bulk mode")
 	syncWorkers = flag.Int("workers", 8, "number of workers to process blocks in bulk mode")
 	dryRun      = flag.Bool("dryrun", false, "do not index blocks, only download")
 
@@ -215,7 +215,7 @@ func mainWithExitCode() int {
 	if internalState.DbState != common.DbStateClosed {
 		if internalState.DbState == common.DbStateInconsistent {
 			glog.Error("internalState: database is in inconsistent state and cannot be used")
-			return exitCodeFatal
+			//return exitCodeFatal
 		}
 		glog.Warning("internalState: database was left in open state, possibly previous ungraceful shutdown")
 	}
@@ -313,10 +313,10 @@ func mainWithExitCode() int {
 		}
 		err = chain.InitializeMempool(addrDescForOutpoint, onNewTxAddr, onNewTx)
 		glog.Error("initializeMempool ", err)
-		//if err != nil {
-		//	glog.Error("initializeMempool ", err)
-		//	return exitCodeFatal
-		//}
+		if err != nil {
+			glog.Error("initializeMempool ", err)
+			return exitCodeFatal
+		}
 		var mempoolCount int
 		if mempoolCount, err = mempool.Resync(); err != nil {
 			glog.Error("resyncMempool ", err)
@@ -521,11 +521,11 @@ func syncIndexLoop() {
 	glog.Info("syncIndexLoop starting")
 	// resync index about every 15 minutes if there are no chanSyncIndex requests, with debounce 1 second
 	common.TickAndDebounce(time.Duration(*resyncIndexPeriodMs)*time.Millisecond, debounceResyncIndexMs*time.Millisecond, chanSyncIndex, func() {
-		if err := syncWorker.ResyncIndex(onNewBlockHash, false); err != nil {
+		if err := syncWorker.ResyncIndex(onNewBlockHash, true); err != nil {
 			glog.Error("syncIndexLoop ", errors.ErrorStack(err), ", will retry...")
 			// retry once in case of random network error, after a slight delay
 			time.Sleep(time.Millisecond * 2500)
-			if err := syncWorker.ResyncIndex(onNewBlockHash, false); err != nil {
+			if err := syncWorker.ResyncIndex(onNewBlockHash, true); err != nil {
 				glog.Error("syncIndexLoop ", errors.ErrorStack(err))
 			}
 		}

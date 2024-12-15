@@ -405,7 +405,9 @@ ConnectLoop:
 	for i := 0; i < w.syncWorkers; i++ {
 		close(bch[i])
 	}
+	glog.Error("writeBlockDone 1")
 	<-writeBlockDone
+	glog.Error("writeBlockDone 2")
 	return err
 }
 

@@ -176,29 +176,29 @@ func (b *TronRPC) InitializeMempool(addrDescForOutpoint bchain.AddrDescForOutpoi
 		return errors.New("Mempool not created")
 	}
 
-	var err error
-	var txs []string
-	// get initial mempool transactions
-	// workaround for an occasional `decoding block` error from getBlockRaw - try 3 times with a delay and then proceed
-	for i := 0; i < 3; i++ {
-		txs, err = b.GetMempoolTransactions()
-		if err == nil {
-			break
-		}
-		glog.Error("GetMempoolTransaction ", err)
-		time.Sleep(time.Second * 5)
-	}
+	//var err error
+	//var txs []string
+	//// get initial mempool transactions
+	//// workaround for an occasional `decoding block` error from getBlockRaw - try 3 times with a delay and then proceed
+	//for i := 0; i < 3; i++ {
+	//	txs, err = b.GetMempoolTransactions()
+	//	if err == nil {
+	//		break
+	//	}
+	//	glog.Error("GetMempoolTransaction ", err)
+	//	time.Sleep(time.Second * 5)
+	//}
 
-	for _, txid := range txs {
-		b.Mempool.AddTransactionToMempool(txid)
-	}
+	//for _, txid := range txs {
+	//	b.Mempool.AddTransactionToMempool(txid)
+	//}
 
-	b.Mempool.OnNewTxAddr = onNewTxAddr
-	b.Mempool.OnNewTx = onNewTx
+	//b.Mempool.OnNewTxAddr = onNewTxAddr
+	//b.Mempool.OnNewTx = onNewTx
 
-	if err = b.subscribeEvents(); err != nil {
-		return err
-	}
+	//if err = b.subscribeEvents(); err != nil {
+	//	return err
+	//}
 
 	b.mempoolInitialized = true
 
@@ -417,11 +417,11 @@ func (b *TronRPC) getBestHeader() (bchain.EVMHeader, error) {
 	defer b.bestHeaderLock.Unlock()
 	// if the best header was not updated for 15 minutes, there could be a subscription problem, reconnect RPC
 	// do it only in case of normal operation, not initial synchronization
-	if b.bestHeaderTime.Add(15*time.Minute).Before(time.Now()) && !b.bestHeaderTime.IsZero() && b.mempoolInitialized {
-		err := b.reconnectRPC()
-		if err != nil {
-			return nil, err
-		}
+	if b.bestHeaderTime.Add(30*time.Second).Before(time.Now()) && !b.bestHeaderTime.IsZero() && b.mempoolInitialized {
+		//err := b.reconnectRPC()
+		//if err != nil {
+		//	return nil, err
+		//}
 		b.bestHeader = nil
 	}
 	if b.bestHeader == nil {
